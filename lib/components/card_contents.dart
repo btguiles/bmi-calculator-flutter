@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-
-const TextStyle kLabelTextStyle =
-    TextStyle(fontSize: 18, color: Color(0xFF8D8E98));
+import 'package:bmi_calculator/constants.dart';
 
 class CardContents extends StatelessWidget {
   CardContents({this.iconData, this.text});

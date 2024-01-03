@@ -1,21 +1,11 @@
+import 'package:bmi_calculator/screens/results_page.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'reusable_card.dart';
-import 'card_contents.dart';
-
-const double kBottomContainerHeight = 80;
-const List<Color> kMyColors = [
-  Color(0xFF1D1E33), // Active Card Color
-  Color(0xFFEB1555),
-  Color(0xFF111328), // Inactive Card color
-  Color(0xFF888888), // Inactive Text Color
-];
-
-const TextStyle kNumberTextStyle =
-    TextStyle(fontSize: 50, fontWeight: FontWeight.w900);
-
-enum Gender { male, female }
+import 'package:bmi_calculator/constants.dart';
+import 'package:bmi_calculator/components/card_contents.dart';
+import 'package:bmi_calculator/components/reusable_card.dart';
+import 'package:bmi_calculator/components/rounded_icon_button.dart';
+import 'package:bmi_calculator/calculator_brain.dart';
 
 class InputPage extends StatefulWidget {
   @override
@@ -24,7 +14,7 @@ class InputPage extends StatefulWidget {
 
 class _InputPageState extends State<InputPage> {
   int height = 180;
-  int weight = 60;
+  int weight = 70;
   int age = 30;
 
   Color maleCardColor = kMyColors[2];
@@ -44,7 +34,7 @@ class _InputPageState extends State<InputPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('TITLE'),
+        title: Text('BMI CALCULATOR'),
       ),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -202,35 +192,36 @@ class _InputPageState extends State<InputPage> {
               ],
             ),
           ),
-          Container(
-            color: kMyColors[1],
-            margin: EdgeInsets.only(top: 10),
-            width: double.infinity,
-            height: kBottomContainerHeight,
+          GestureDetector(
+            child: Container(
+              padding: EdgeInsets.only(top: 10),
+              alignment: Alignment.topCenter,
+              child: Text(
+                'CALCULATE',
+                style: kLargeTextStyle,
+              ),
+              color: kMyColors[1],
+              margin: EdgeInsets.only(top: 10),
+              width: double.infinity,
+              height: kBottomContainerHeight,
+            ),
+            onTap: () {
+              CalculatorBrain calc =
+                  CalculatorBrain(height: height, weight: weight);
+
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => ResultsPage(
+                      bmiResults: calc.calculateBMI(),
+                      resultText: calc.getResult(),
+                      interpretaion: calc.getInterpretation()),
+                ),
+              );
+            },
           ),
         ],
       ),
-    );
-  }
-}
-
-// Color(0xFF1D1E33)
-
-class RoundIconButton extends StatelessWidget {
-  const RoundIconButton({@required this.icon, @required this.onPressed});
-
-  final IconData icon;
-  final Function onPressed;
-
-  @override
-  Widget build(BuildContext context) {
-    return RawMaterialButton(
-      child: Icon(icon),
-      onPressed: onPressed,
-      shape: CircleBorder(),
-      fillColor: Color(0xFF4C4F5E),
-      constraints: BoxConstraints.tightFor(height: 56, width: 56),
-      elevation: 0,
     );
   }
 }
